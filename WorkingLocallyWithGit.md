@@ -87,7 +87,7 @@ Adds all the updated files
 
 # History and diff
 ## History
-Commit history of the file can be found using git log. It provides history in reversed chronological order
+Commit history of the file or repository can be found using git log. It provides history in reversed chronological order
 ```bash
 :~/my-local-repo$ git log  
 commit 47c0a841509a930258475c5358846fd2afd9c55e
@@ -123,7 +123,7 @@ index be0aefb..add4189 100644
 ## Using HEAD
  The latest commit is known as Head. I can also go back from the head by using a tilde syntax, so tilde1 is one commit back from the Head so I can go from Head tilde1 to Head which provides with the same one
 ```bash
-ubuntu@git-standalone:~/my-local-repo$ git diff HEAD ... HEAD~1
+~/my-local-repo$ git diff HEAD ... HEAD~1
 diff --git a/Hello.txt b/Hello.txt
 index 97f8c93..a29bdeb 100644
 --- a/Hello.txt
@@ -132,3 +132,112 @@ index 97f8c93..a29bdeb 100644
  line1
 -Line 2
 ```
+
+The second option is optional
+```bash
+~/my-local-repo$ git diff HEAD~1
+````
+# Staging changes as multiple commits
+Stage a file named 3.txt
+```bash
+ $ git add 3.txt
+```
+Stage multiple files. To stage files 4.txt 5.txt 6.txt
+```bash
+$ git add -A
+```
+Stage only the files that are in staging area. (i.e) The files which are already in staging aread and updated in local copy
+```bash
+$ git add -u
+```
+
+# Deleting and renaming files
+## Delete a file
+Delete file 6.txt
+- Delete using operating system command for example : rm
+- Stage the file
+- Commit to repository (Remove from repository)
+
+```bash
+$ rm 6.txt
+$ git add -u
+$ git commit -m "file 6 is removed"
+```
+
+## Rename a file
+Rename file named 5.txt
+- Rename using operating system command for example : mv
+- Stage the file
+- Commit the file to repository
+
+```bash
+$ mv 5.txt 51.txt
+$ git add -u
+$ git status
+On branch master                                  
+Changes to be committed:                          
+  (use "git reset HEAD <file>..." to unstage)     
+
+        renamed:    5.txt -> 51.txt               
+$ git commit -m "file 5 is renamed to 51"
+
+```
+**Note:** Git is intelligent to identify 5.txt file is changed
+
+# Undoing changes to the working copy
+I made change to file 1.txt and I want to discard them.  Simply chekout the file from repository
+```bash
+$ git checkout 1.txt
+```
+**Note**: The contents of working copy will replaced with HEAD contents
+
+# Undoing/redoing changes in the repository
+Reset the working copy and repository to HEAD~1
+```bash
+$ git reset --hard HEAD~1
+```
+# Cleaning the working copy
+Delete the unstaged files from wroking copy. For example I have file 2.txt and 3.txt that are not staged they can be easily removed
+```bash
+$ touch 2.txt 3.txt
+$ git status
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        2.txt
+        3.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+$ git clean -f
+Removing 2.txt
+Removing 3.txt
+$ ls
+1.txt
+```
+# Ignoring files with .gitignore
+For example to ignore a folder named logs. Simply create a file .gitignore and specify the logs folder
+```bash
+$ mkdir logs
+$ touch logs/log.txt
+$ git status
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        logs/
+
+nothing added to commit but untracked files present (use "git add" to track)
+$ echo "/logs" >> .gitignore
+$ git status
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        .gitignore
+
+nothing added to commit but untracked files present (use "git add" to track)
+$ cat .gitignore
+/logs
+```
+**Note:** The logs folder is ignored . /logs is relative to repository path not to OS path
